@@ -1,10 +1,14 @@
-<h1> héroe
-  <small>heroe</small>
+<h1>
+  {{ currentHero.id ?  'Editar ': 'Agregar '}} héroe
+  @if (currentHero.id) {
+    <small>{{currentHero.superhero}}</small>
+
+  }
 </h1>
 
 <mat-divider></mat-divider>
 
-<div class="grid">
+<form class="grid" [formGroup]="heroForm">
   <div class="col-12 sm:col-6">
     <mat-card>
       <mat-card-content>
@@ -16,6 +20,7 @@
               matInput
               type="text"
               required
+              formControlName="superhero"
             >
           </mat-form-field>
 
@@ -25,6 +30,7 @@
               matInput
               type="text"
               required
+              formControlName="alter_ego"
             >
           </mat-form-field>
 
@@ -34,12 +40,26 @@
               matInput
               type="text"
               required
+              formControlName="first_appearance"
+            >
+          </mat-form-field>
+
+          <mat-form-field class="col-12">
+            <mat-label>Personajes</mat-label>
+            <input
+              matInput
+              type="text"
+              required
+              formControlName="characters"
             >
           </mat-form-field>
 
           <mat-form-field class="col-12">
             <mat-label>Creador</mat-label>
-            <mat-select>
+            <mat-select
+            required
+            formControlName="publisher"
+              >
               @for(publisher of publishers; track $index){
                 <mat-option [value]="publisher.id">{{ publisher.desc }}</mat-option>
 
@@ -48,15 +68,29 @@
             </mat-select>
           </mat-form-field>
 
+          <mat-form-field class="col-12">
+            <mat-label>Imagen Alternativa </mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="alt_img"
+            >
+          </mat-form-field>
         </div>
 
         <div class="grid flex justify-content-around">
 
-          <button mat-flat-button color="warn" class="col-5">
-            Borrar
-          </button>
+          @if (currentHero.id) {
+            <button mat-flat-button color="warn" class="col-5"
 
-          <button mat-flat-button color="primary" class="col-5">
+            (click)="onDeleteHero()">
+              Borrar
+            </button>
+          }
+
+          <button mat-flat-button color="primary"
+            class="col-5"
+            (click)="onSubmit()">
             <mat-icon>save</mat-icon>
             Guardar
           </button>
@@ -68,7 +102,7 @@
   </div>
   <div class="col-12 sm:col-6">
     <mat-card>
-      <img matCardImage src="" alt="imágen del héroe">
+      <img matCardImage [src]="currentHero | heroImage" alt="imágen del héroe">
     </mat-card>
   </div>
-</div>
+</form>
